@@ -40,5 +40,6 @@ objectlist = 'kyjen_squeakin_eggs_plush_puppies,cloud_b_plush_bear,laugh_out_lou
 [D,j] = LMquery(database, 'object.name', objectlist);
 [img, seg, names] = LM2segments(D, [1080, 1920], HOMEIMAGES, NEWHOMELMSEGMENTS);
 
-labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR)
+TraindataPercentage = .8; % percentage images used for training
+labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR, TraindataPercentage);
 

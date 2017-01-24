@@ -1,4 +1,4 @@
-function labelme2pascal(D, databasename, HOMELMIMAGES, folderdestination)
+function labelme2pascal(D, databasename, HOMELMIMAGES, folderdestination, TraindataPercentage)
 %
 % HOMELMIMAGES = 'http://labelme.csail.mit.edu/Images';
 % pascalfolder = '/databases/'
@@ -21,7 +21,7 @@ mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Main'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Split training/test by selecting equal number of images per folder
-Ntraining = .8; % percentage images used for training
+Ntraining = TraindataPercentage; % percentage images used for training
 scenes = folder2class(D);
 train = []; test = []; validation = [];
 for i = 1:max(scenes)
