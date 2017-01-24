@@ -161,29 +161,26 @@ for ndx = 1:Nimages
         img(:,:,:,ndx) = imgtmp;
     end
 
-    % Save gist if a HOMELMSEGMENTS file is provided
-    if precomputed
-        I = imgtmp; 
-        S = uint16(Mclasses);        
-        S_instances = uint16(S_instances);
-        mkdir(fullfile(HOMELMSEGMENTS, D(ndx).annotation.folder))
-        fileseg = fullfile(HOMELMSEGMENTS, D(ndx).annotation.folder, [D(ndx).annotation.filename(1:end-4) '.mat']);
-        if ~isempty(imagesize)
-            save (fileseg, 'I', 'S', 'names', 'S_instances')
-        else
-            save (fileseg, 'S', 'names', 'S_instances')
-        end
-    end
-
     % Visualization
     if Nimages > 1
-        subplot(121)
+        figure(1)
         image(imgtmp); axis('equal'); axis('tight');
         title(sprintf('%d (out of %d)', ndx, Nimages))
-        subplot(122)
-        image(mod(Mclasses+1,256)); axis('equal'); axis('tight');
-        colormap([0 0 0; hsv(min(Nobjectclasses+1,256))])
+        
+        figure(2)
+        imgout = image(mod(Mclasses+1,256));  axis off
+        mymap = colormap([0 0 0; hsv(min(Nobjectclasses+1,256))]);
         drawnow
+        
+        % Save gist if a HOMELMSEGMENTS file is provided
+        if precomputed
+            mkdir(fullfile(HOMELMSEGMENTS))
+            fileseg = fullfile(HOMELMSEGMENTS, [D(ndx).annotation.filename(1:end-4) '.png']);
+            if ~isempty(imagesize)
+                % save (fileseg, 'I', 'S', 'names', 'S_instances')
+                imwrite(imgout.CData, mymap, fileseg);
+            end
+        end
     end
 end
 % 

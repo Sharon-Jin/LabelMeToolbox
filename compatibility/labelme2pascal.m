@@ -7,8 +7,8 @@ function labelme2pascal(D, databasename, HOMELMIMAGES, folderdestination)
 % labelme2pascal(D, databasename, HOMELMIMAGES, pascalfolder)
 
 % mark as 'difficult' objects that are smaller than this bounding box:
-minH = 32;
-minW = 32;
+minH = 10;
+minW = 10;
 % Objects marked as difficult are not currently being considered in the
 % pascal evaluation.
 
@@ -21,7 +21,7 @@ mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Main'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Split training/test by selecting equal number of images per folder
-Ntraining = .5; % percentage images used for training
+Ntraining = .8; % percentage images used for training
 scenes = folder2class(D);
 train = []; test = []; validation = [];
 for i = 1:max(scenes)
