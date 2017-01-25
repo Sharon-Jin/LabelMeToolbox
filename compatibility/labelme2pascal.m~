@@ -18,7 +18,7 @@ Nimages = length(D);
 mkdir(fullfile(folderdestination, databasename, 'JPEGImages'))
 mkdir(fullfile(folderdestination, databasename, 'Annotations'))
 mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Main'))
-mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation'))
+mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Segmenta'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Split training/test by selecting equal number of images per folder

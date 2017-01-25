@@ -20,6 +20,7 @@ HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Annotations/us
 NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc/';
 NEWDATABASENAME = 'APC_PASCAL';
 NEWHOMELMSEGMENTS = [NEWHOMEDIR NEWDATABASENAME '/SegmentationClass'];
+NEWIMAGESIZE = [270, 480];
 
 % This line reads the entire database into a Matlab struct
 database = LMdatabase(HOMEANNOTATIONS);
@@ -38,8 +39,8 @@ objectlist = 'kyjen_squeakin_eggs_plush_puppies,cloud_b_plush_bear,laugh_out_lou
 
 
 [D,j] = LMquery(database, 'object.name', objectlist);
-[img, seg, names] = LM2segments(D, [1080, 1920], HOMEIMAGES, NEWHOMELMSEGMENTS);
+[img, seg, names] = LM2segments(D, NEWIMAGESIZE, HOMEIMAGES, NEWHOMELMSEGMENTS);
 
 TraindataPercentage = .8; % percentage images used for training
-labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR, TraindataPercentage);
+labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR, TraindataPercentage, NEWIMAGESIZE);
 
