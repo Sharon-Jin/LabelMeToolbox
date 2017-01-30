@@ -20,7 +20,7 @@ HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Annotations/us
 NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc/';
 NEWDATABASENAME = 'APC_PASCAL';
 NEWHOMELMSEGMENTS = [NEWHOMEDIR NEWDATABASENAME '/SegmentationClass'];
-NEWIMAGESIZE = [270, 480];
+NEWIMAGESIZE = [540, 960];
 
 % This line reads the entire database into a Matlab struct
 database = LMdatabase(HOMEANNOTATIONS);
