@@ -5,8 +5,8 @@ function img = LMimread(D, ndx, HOMEIMAGES)
 %
 % This function is similar to LMread. Just for compatibility.
 
-filename = fullfile(HOMEIMAGES, D(ndx).annotation.folder, D(ndx).annotation.filename);
-
+%filename = fullfile(HOMEIMAGES, D(ndx).annotation.folder, D(ndx).annotation.filename);
+filename = fullfile(HOMEIMAGES, '/users/JudyMRSD/occlusion_data1/', D(ndx).annotation.filename);
 
 if strcmp(filename(1:5), 'http:')
     filename = strrep(filename, '\', '/');

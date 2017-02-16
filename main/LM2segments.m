@@ -169,7 +169,8 @@ for ndx = 1:Nimages
         
         figure(2)
         imgout = image(mod(Mclasses+1,256));  axis off
-        mymap = colormap([0 0 0; hsv(min(Nobjectclasses+1,256))]);
+        % mymap = colormap([0 0 0; hsv(min(Nobjectclasses+1,256))]);
+        mymap = colormap(hsv(min(Nobjectclasses+1,256)));
         drawnow
         
         % Save gist if a HOMELMSEGMENTS file is provided

@@ -44,7 +44,7 @@ end
 fclose(fid)
 
 % save train.txt file with image ids
-fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Main', 'train.txt'), 'w');
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Main', 'trainval.txt'), 'w');
 for i = 1:length(train)
     fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
 end
@@ -59,7 +59,7 @@ end
 fclose(fid)
 
 % save train.txt file with image ids
-fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'train.txt'), 'w');
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'trainval.txt'), 'w');
 for i = 1:length(train)
     fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
 end

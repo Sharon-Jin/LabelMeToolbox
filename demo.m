@@ -13,17 +13,21 @@ clear all
 close all
 
 % Define the root folder for the images
-HOMEIMAGES = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Images'; % you can set here your default folder
-HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Annotations/users/JudyMRSD/50_items_5_classes_tighterpolygon'; % you can set here your default folder
+%HOMEIMAGES = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Images'; % you can set here your default folder
+HOMEIMAGES = '/Users/SK/Desktop/cmu/apc/data/apc_0210/scan0210/occlusion_data_1/Images';
+HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/apc/data/apc_0210/scan0210/occlusion_data_1/Annotations/users/JudyMRSD/occlusion_data1';
+%HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/apc/data/apc/collection1/Annotations/users/JudyMRSD/50_items_5_classes_tighterpolygon'; % you can set here your default folder
 
 % Define the root folder for the images
-NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc/';
-NEWDATABASENAME = 'APC_PASCAL';
+%NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc/';
+NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc_0210/';
+NEWDATABASENAME = 'apc_occluded';
 NEWHOMELMSEGMENTS = [NEWHOMEDIR NEWDATABASENAME '/SegmentationClass'];
-NEWIMAGESIZE = [540, 960];
+NEWIMAGESIZE = [270, 480];
 
 % This line reads the entire database into a Matlab struct
 database = LMdatabase(HOMEANNOTATIONS);
+
 objectlist = 'kyjen_squeakin_eggs_plush_puppies,cloud_b_plush_bear,laugh_out_loud_joke_book,creativity_chenille_stems,hanes_tube_socks';
 
 % Composing queries:
@@ -37,8 +41,11 @@ objectlist = 'kyjen_squeakin_eggs_plush_puppies,cloud_b_plush_bear,laugh_out_lou
 % LMdbshowscenes(LMquery(database, 'object.name', objectlist), HOMEIMAGES);
 % LMdbshowobjects(LMquery(database, 'object.name', objectlist), HOMEIMAGES);
 
+LMdbshowscenes(LMquery(database, 'object.name', objectlist)); % shows all the images that have at least one deleted polygon
 
 [D,j] = LMquery(database, 'object.name', objectlist);
+pause
+
 [img, seg, names] = LM2segments(D, NEWIMAGESIZE, HOMEIMAGES, NEWHOMELMSEGMENTS);
 
 TraindataPercentage = .8; % percentage images used for training
