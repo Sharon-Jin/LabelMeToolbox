@@ -149,7 +149,7 @@ LMplot(newannotation, newimg);
             if isnumeric(D(n).annotation.object(m).crop)
                 D(n).annotation.object(m).crop = num2str(D(n).annotation.object(m).crop);
             end
-            
+            v.annotation.object(m).pose = 'Unspecified';
             v.annotation.object(m).truncated = D(n).annotation.object(m).crop;
             v.annotation.object(m).crop = D(n).annotation.object(m).crop;
             if strcmp(strtrim(D(n).annotation.object(m).crop), '1') || boundingbox(m,4)-boundingbox(m,2)<minH || boundingbox(m,3)-boundingbox(m,1)<minW
