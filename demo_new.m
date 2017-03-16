@@ -13,32 +13,29 @@ clear all
 close all
 
 % Define the root folder for the images
-dir = '/Users/SK/Desktop/cmu/apc/data/apc_0315/raw/collection_all';
-HOMEIMAGES = [dir '/Images']; % you can set here your default folder
-HOMEANNOTATIONS = [dir '/Annotations/users/JudyMRSD/occlusion_data1']; % you can set here your default folder
+dir = '/Users/SK/Desktop/cmu/apc/data/apc_0315/raw/collection_all/';
+HOMEIMAGES = [dir 'Images']; % you can set here your default folder
+HOMEANNOTATIONS = [dir 'Annotations/users/JudyMRSD/2017_small_set']; % you can set here your default folder
 
 % Define the root folder for the images
-NEWHOMEDIR = dir;
+NEWHOMEDIR = '/Users/SK/Desktop/cmu/apc/data/apc_0315/';
 NEWDATABASENAME = 'APC40';
 NEWHOMELMSEGMENTS = [NEWHOMEDIR NEWDATABASENAME '/SegmentationClass'];
-NEWIMAGESIZE = [270, 480];
-
-%{
-HOMEIMAGES = '/Users/SK/Desktop/cmu/RoMe/outdoor/Images/';
-HOMEANNOTATIONS = '/Users/SK/Desktop/cmu/RoMe/outdoor/Annotations/users/Sharon/outdoor';
-
-NEWHOMEDIR = '/Users/SK/Desktop/cmu/RoMe/outdoor/';
-NEWDATABASENAME = 'robot';
-NEWHOMELMSEGMENTS = [NEWHOMEDIR NEWDATABASENAME '/SegmentationClass'];
-NEWIMAGESIZE = [240, 420];
-%}
+NEWIMAGESIZE = [360, 640];
 
 % This line reads the entire database into a Matlab struct
 database = LMdatabase(HOMEANNOTATIONS);
 
-%objectlist = 'kyjen_squeakin_eggs_plush_puppies,cloud_b_plush_bear,laugh_out_loud_joke_book,creativity_chenille_stems,hanes_tube_socks';
-objectlist = 'grass,robot,tree,soil,boulder,rock,building,sky,ground,people';
+load('namelist_old.mat');
+objectlist = '';
+if size(namelist_old,1) > 1
+    objectlist = namelist_old{1,1};
+end
+for i = 2:size(namelist_old,1)
+    objectlist = [objectlist ',' namelist_old{i,1}];
+end
 
+objectlist
 % Composing queries:
 % [D,j] = LMquery(database, 'object.name', 'cloud_b_plush_bear');
 % LMdbshowscenes(D, HOMEIMAGES); % this shows only the cloud_b_plush_bear side views
@@ -50,12 +47,14 @@ objectlist = 'grass,robot,tree,soil,boulder,rock,building,sky,ground,people';
 % LMdbshowscenes(LMquery(database, 'object.name', objectlist), HOMEIMAGES);
 % LMdbshowobjects(LMquery(database, 'object.name', objectlist), HOMEIMAGES);
 
-LMdbshowscenes(LMquery(database, 'object.name', objectlist)); % shows all the images that have at least one deleted polygon
+%LMdbshowscenes(LMquery(database, 'object.name', objectlist)); % shows all the images that have at least one deleted polygon
+%LMdbshowobjects(LMquery(database, 'object.name', 'windex'),HOMEIMAGES); % shows all the images that have at least one deleted polygon
 
-%[D,j] = LMquery(database, 'object.name', objectlist);
 
-%[img, seg, names] = LM2segments(D, NEWIMAGESIZE, HOMEIMAGES, NEWHOMELMSEGMENTS);
+[D,j] = LMquery(database, 'object.name', objectlist);
 
-%TraindataPercentage = .8; % percentage images used for training
-%labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR, TraindataPercentage, NEWIMAGESIZE);
+[img, seg, names] = LM2segments(D, NEWIMAGESIZE, HOMEIMAGES, NEWHOMELMSEGMENTS, objectlist);
+
+TraindataPercentage = .8; % percentage images used for training
+labelme2pascal(D, NEWDATABASENAME, HOMEIMAGES, NEWHOMEDIR, TraindataPercentage, NEWIMAGESIZE);
 

@@ -77,7 +77,7 @@ for i = 1:Nimages
                 end
             end
         catch
-            disp(sprintf('warning: some problem with image %s/%s',database(i).annotation.folder,database(i).annotation.filename))
+            disp(sprintf('warning: some problem with image %s/%s', database(i).annotation.folder,database(i).annotation.filename))
         end
     end
 end

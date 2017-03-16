@@ -80,7 +80,12 @@ if nargin == 3
 
         for i = 1:length(j)-1
             class{i} = objectlist(j(i)+1:j(i+1)-1); % get object name
+
             jc = LMobjectindex(annotation, class{i}, 'exact');
+            %annotation
+            %class{i}
+            jc
+            pause
             for n = 1:length(jc)
                 [X,Y] = getLMpolygon(annotation.object(jc(n)).polygon);
                 ni = ni+1;
@@ -95,15 +100,14 @@ if nargin == 3
         mask = logical(zeros(nrows, ncols, 1));
         class = [];
     end
-    
     %debug
-    %seg = colorSegments(mask);
-    %figure(5),imshow(seg);
-    %pause
+    seg = colorSegments(mask);
+    figure(2),imshow(seg);
+    pause
 end
 
 if nargout ==0;
     seg = colorSegments(mask);
-    figure(5),imshow(seg);
+    imshow(seg);
 end
 

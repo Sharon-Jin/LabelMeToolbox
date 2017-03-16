@@ -9,6 +9,7 @@ function labelme2pascal(D, databasename, HOMELMIMAGES, folderdestination, Traind
 % mark as 'difficult' objects that are smaller than this bounding box:
 minH = 10;
 minW = 10;
+write_bbx = 1;
 % Objects marked as difficult are not currently being considered in the
 % pascal evaluation.
 
@@ -21,7 +22,7 @@ mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Main'))
 mkdir(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Split training/test by selecting equal number of images per folder
+%% Split training/test by selecting equal number of images per folder
 Ntraining = TraindataPercentage; % percentage images used for training
 scenes = folder2class(D);
 train = []; test = []; validation = [];
@@ -44,13 +45,21 @@ end
 fclose(fid)
 
 % save train.txt file with image ids
-fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Main', 'trainval.txt'), 'w');
-for i = 1:length(train)
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Main', 'train.txt'), 'w');
+for i = 1:floor(length(train)*0.8)
     fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
 end
 fclose(fid)
 
-% Training and test data list for Segmentation Task
+% save train.txt file with image ids
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Main', 'val.txt'), 'w');
+for i = floor(length(train)*0.8)+1:length(train)
+    fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
+end
+fclose(fid)
+
+
+%% Training and test data list for Segmentation Task
 % save test.txt file with image ids
 fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'test.txt'), 'w');
 for i = 1:length(test)
@@ -59,14 +68,21 @@ end
 fclose(fid)
 
 % save train.txt file with image ids
-fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'trainval.txt'), 'w');
-for i = 1:length(train)
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'train.txt'), 'w');
+for i = 1:floor(length(train)*0.8)
+    fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
+end
+fclose(fid)
+
+% save train.txt file with image ids
+fid=fopen(fullfile(folderdestination, databasename, 'ImageSets', 'Segmentation', 'val.txt'), 'w');
+for i = floor(length(train)*0.8)+1:length(train)
     fprintf(fid, '%s\n', strrep(D(train(i)).annotation.filename, '.jpg', ''));
 end
 fclose(fid)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Create summary report (a text file with number of instances.)
+%% Create summary report (a text file with number of instances.)
 [objectnames, instancecounts] = LMobjectstats(D);
 counts = full(sum(instancecounts,2));
 counts_test = full(sum(instancecounts(:, test),2));
@@ -129,11 +145,13 @@ LMplot(newannotation, newimg);
     v.annotation.size.height = nrows;
     v.annotation.size.depth = cc;
     v.annotation.segmented = 0;
-    
+    [pathstr,name,ext] = fileparts(filename);
+    fileID = fopen(['/Users/SK/Desktop/cmu/apc/data/apc_0315/gt output/' name '.txt'],'w');
     if Nobjects>0
         boundingbox = LMobjectboundingbox(D(n).annotation); % [xmin ymin xmax ymax]
         for m = 1:Nobjects
-            v.annotation.object(m).name = D(n).annotation.object(m).name;
+            v.annotation.object(m).name = related_name(D(n).annotation.object(m).name);
+            %v.annotation.object(m).name = D(n).annotation.object(m).name;
             if isfield(D(n).annotation.object(m), 'attributes')
                 v.annotation.object(m).attributes = D(n).annotation.object(m).attributes;
             end
@@ -142,6 +160,13 @@ LMplot(newannotation, newimg);
             v.annotation.object(m).bndbox.xmax = boundingbox(m,3);
             v.annotation.object(m).bndbox.ymax = boundingbox(m,4);
             v.annotation.object(m).polygon = D(n).annotation.object(m).polygon; % this keeps the segmentation information from labelme
+            if (write_bbx==1)
+                nbytes = fprintf(fileID,'%s %f %f %f %f %f\n', ...
+                    v.annotation.object(m).name, v.annotation.object(m).bndbox.xmin, ...
+                    v.annotation.object(m).bndbox.ymin, v.annotation.object(m).bndbox.xmax, ...
+                    v.annotation.object(m).bndbox.ymax, 1.0);
+                ['wrote ' name]
+            end
             if ~isfield(D(n).annotation.object(m), 'crop')
                 D(n).annotation.object(m).crop = '0';
             end
@@ -158,10 +183,19 @@ LMplot(newannotation, newimg);
                 v.annotation.object(m).difficult = '0';
             end
         end
+        fclose(fileID);
     end
     
     % Write annotation file
     writeXML(fullfile(folderdestination, databasename, 'Annotations', filename_annotation), v);
 end
+end
 
+function sout=related_name(sin)
+    load('namelist_old.mat');
+    load('namelist_new.mat');
+    IndexC = strfind(namelist_old, sin);
+    Index = find(not(cellfun('isempty', IndexC)));
+    sout = namelist_new{Index};
+end
 
