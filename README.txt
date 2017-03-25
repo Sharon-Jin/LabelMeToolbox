@@ -1,3 +1,17 @@
+LabelMe To PASCAL data transform for new training data
+
+LabelMe:
+/Annotations
+/Images 
+
+=> 
+
+PASCAL:
+/Annotations
+/JPEGImages 
+/ImageSets 
+/SegmentationClass  
+
 LabelMe is a WEB-based image annotation tool and a Matlab toolbox that allows researchers to label images and share the annotations with the rest of the community. 
 Copyright (C) 2007  MIT, Computer Science and Artificial
 Intelligence Laboratory. Antonio Torralba, Bryan Russell, William T. Freeman
